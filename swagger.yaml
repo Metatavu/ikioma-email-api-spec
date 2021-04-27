@@ -37,11 +37,7 @@ paths:
               $ref: '#/components/schemas/Email'
       responses:
         "200":
-          description: Creation was successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Email'
+          description: Sending was successful
         "400":
           description: Invalid request was sent to the server
           content:
@@ -101,7 +97,8 @@ components:
           description: email address of receiver
         subject:
           type: string
-          desciption: email subject
+          description: email subject
         messageBody:
           type: string
           description: email message body
+
