@@ -21,6 +21,47 @@ paths:
             text/plain:
               schema:
                 type: string
+  /v1/emails:
+    post:
+      summary:  Creates an email
+      description: Creates an email
+      operationId: createEmail
+      tags:
+        - Email
+      requestBody:
+        description: An email to send
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+      responses:
+        "200":
+          description: Sending was successful
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   securitySchemes:
@@ -42,3 +83,22 @@ components:
           format: int32
         message:
           type: string
+
+    Email:
+      type: object
+      description: Email object
+      required:
+        - receiverAddress
+        - subject
+        - messageBody
+      properties:
+        receiverAddress:
+          type: string
+          description: email address of receiver
+        subject:
+          type: string
+          description: email subject
+        messageBody:
+          type: string
+          description: email message body
+
