@@ -36,7 +36,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Email'
       responses:
-        "200":
+        "202":
           description: Sending was successful
         "400":
           description: Invalid request was sent to the server
