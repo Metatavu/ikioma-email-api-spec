@@ -291,6 +291,9 @@ components:
           format: uri
           description: Checkout Finland payment URL
           readOnly: true
+        transactionId:
+          type: string
+          description: Checkout provided transaction ID.
 
     PaymentStatus:
       type: string
