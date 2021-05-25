@@ -228,6 +228,9 @@ components:
           type: string
           format: uuid
           description: Practitioner Keycloak ID
+        total:
+          type: long
+          description: Total price for prescriptions
         prescriptions:
           type: array
           description: List of prescriptions with description
