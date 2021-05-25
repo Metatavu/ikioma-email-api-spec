@@ -219,6 +219,7 @@ components:
       required:
         - practitionerUserId
         - prescriptions
+        - price
       properties:
         id:
           type: string
@@ -228,6 +229,9 @@ components:
           type: string
           format: uuid
           description: Practitioner Keycloak ID
+        price:
+          type: long
+          description: Total price for prescriptions
         prescriptions:
           type: array
           description: List of prescriptions with description
