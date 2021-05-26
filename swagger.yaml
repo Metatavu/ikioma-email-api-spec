@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Ikioma mail API-spec
+  title: Ikioma payments API-spec
 
 security:
   - bearerAuth: []
@@ -21,20 +21,149 @@ paths:
             text/plain:
               schema:
                 type: string
-  /v1/emails:
+
+  /v1/prescriptionRenewal:
     post:
-      summary:  Creates an email
-      description: Creates an email
-      operationId: createEmail
+      summary:  Creates prescription renewal 
+      description: Creates an prescription renewal
+      operationId: createPrescriptionRenewal
       tags:
-        - Email
+        - PrescriptionRenewals
       requestBody:
-        description: An email to send
+        description: Prescription renewal request
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Email'
+              $ref: '#/components/schemas/PrescriptionRenewal'
+      responses:
+        "200":
+          description: Created prescription renewal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrescriptionRenewal'
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/prescriptionRenewal/{id}:
+    get:
+      summary: Find prescription renewal
+      description: Finds prescription renewal
+      operationId: getPrescriptionRenewal
+      tags:
+        - PrescriptionRenewals
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Prescription renewal ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Prescription renewal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrescriptionRenewal'
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/checkoutFinland/success:
+    get:
+      summary: Callback endpoint for checkout finland payment success
+      description: Callback endpoint for checkout finland payment success
+      operationId: checkoutFinlandSuccess
+      tags:
+        - CheckoutFinland
+      parameters:
+        - name: signature
+          in: query
+          required: true
+          schema:
+            type: string
+            description: HMAC signature calculated from other parameter
+      responses:
+        "202":
+          description: Payment was succesful
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/checkoutFinland/cancel:
+    get:
+      summary: Callback endpoint for checkout finland payment cancel
+      description: Callback endpoint for checkout finland payment cancel
+      operationId: checkoutFinlandCancel
+      tags:
+        - CheckoutFinland
       responses:
         "202":
           description: Sending was successful
@@ -84,21 +213,53 @@ components:
         message:
           type: string
 
-    Email:
+    PrescriptionRenewal:
       type: object
-      description: Email object
+      description: Prescription renewal object
       required:
-        - receiverAddress
-        - subject
-        - messageBody
+        - practitionerUserId
+        - prescriptions
+        - price
       properties:
-        receiverAddress:
+        id:
           type: string
-          description: email address of receiver
-        subject:
+          format: uuid
+          readOnly: true
+        practitionerUserId:
           type: string
-          description: email subject
-        messageBody:
+          format: uuid
+          description: Practitioner Keycloak ID
+        price:
+          type: long
+          description: Total price for prescriptions
+        prescriptions:
+          type: array
+          description: List of prescriptions with description
+          items:
+            type: string
+            description: Prescription with description
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        paymentUrl:
           type: string
-          description: email message body
+          description: Checkout Finland payment URL
+          readOnly: true
+        transactionId:
+          type: string
+          description: Checkout provided transaction ID.
+        stamp:
+          type: string
+          format: uuid
+          description: Unique payment identifier.
+        checkoutAccount:
+          type: integer
+          description: merchant id
 
+    PaymentStatus:
+      type: string
+      description: Payment status
+      readOnly: true
+      enum:
+        - NOT_PAID
+        - PAID
+        - CANCELLED
