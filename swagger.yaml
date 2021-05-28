@@ -164,6 +164,13 @@ paths:
       operationId: checkoutFinlandCancel
       tags:
         - CheckoutFinland
+      parameters:
+        - name: signature
+          in: query
+          required: true
+          schema:
+            type: string
+            description: HMAC signature calculated from other parameter
       responses:
         "202":
           description: Sending was successful
