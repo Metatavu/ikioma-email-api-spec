@@ -227,7 +227,6 @@ components:
         - practitionerUserId
         - prescriptions
         - price
-        - redirectUrl
       properties:
         id:
           type: string
@@ -238,7 +237,8 @@ components:
           format: uuid
           description: Practitioner Keycloak ID
         price:
-          type: long
+          type: integer
+          format: int32
           description: Total price for prescriptions
         prescriptions:
           type: array
