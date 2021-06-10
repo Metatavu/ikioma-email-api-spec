@@ -24,7 +24,7 @@ paths:
 
   /v1/prescriptionRenewal:
     post:
-      summary:  Creates prescription renewal 
+      summary:  Creates prescription renewal
       description: Creates an prescription renewal
       operationId: createPrescriptionRenewal
       tags:
@@ -227,6 +227,7 @@ components:
         - practitionerUserId
         - prescriptions
         - price
+        - redirectUrl
       properties:
         id:
           type: string
@@ -261,6 +262,9 @@ components:
         checkoutAccount:
           type: integer
           description: merchant id
+        redirectUrl:
+          type: string
+          description: Checkout Finland redirect base URL
 
     PaymentStatus:
       type: string
