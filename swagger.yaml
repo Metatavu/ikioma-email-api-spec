@@ -262,9 +262,12 @@ components:
         checkoutAccount:
           type: integer
           description: merchant id
-        redirectUrl:
+        successRedirectUrl:
           type: string
-          description: Checkout Finland redirect base URL
+          description: Checkout Finland success redirect URL
+        cancelRedirectUrl:
+          type: string
+          description: Checkout Finland cancel redirect URL
 
     PaymentStatus:
       type: string
